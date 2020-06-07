@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .container {
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        width: 700px;
+        height: 530px;
+    }
+    
+    .box img {
+        width: 700px;
+        height: 530px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    
+    .circle {
+        width: 200px;
+        height: 10px;
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        margin-left: -330px;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    .circle b {
+        display: inline-block;
+        width: 11px;
+        height: 11px;
+        opacity: 0.7;
+        background-color: gray;
+        border-radius: 50%;
+        margin: 1px;
+    }
+    
+    .circle .current {
+        position: relative;
+        bottom: -3px;
+        opacity: 0.7;
+        background-color: #fff;
+        border: 3px solid gray;
+    }
+    
+    .btn {
+        position: absolute;
+        top: 50%;
+        width: 35px;
+        height: 40px;
+        margin-top: -25px;
+        background-color: black;
+        opacity: 0.3;
+        text-align: center;
+        line-height: 40px;
+        color: blanchedalmond;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    
+    .btn:hover {
+        opacity: 0.5;
+    }
+    
+    .left {
+        left: 0;
+        border-radius: 0 20px 20px 0;
+    }
+    
+    .right {
+        right: 0;
+        border-radius: 20px 0 0 20px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <img src="js7_img/1.jpg" alt="#">
+            <img src="js7_img/2.jpg" alt="#">
+            <img src="js7_img/3.jpg" alt="#">
+            <img src="js7_img/4.jpg" alt="#">
+            <img src="js7_img/5.jpg" alt="#">
+            <img src="js7_img/6.jpg" alt="#">
+            <img src="js7_img/7.jpg" alt="#">
+            <img src="js7_img/8.jpg" alt="#">
+        </div>
+        <div class="circle">
+            <b class="current"></b>
+            <b></b>
+            <b></b>
+            <b></b>
+            <b></b>
+            <b></b>
+            <b></b>
+            <b></b>
+        </div>
+        <div class="btn left"> &lt; </div>
+        <div class="btn right"> &gt; </div>
+    </div>
+</body>
+<script src="js/jquery.js"></script>
+<script type="text/javascript">
+    /*i表示当前图片和对应圆点的下标*/
+    var i = 0;
+    var timer;
+    $(function() {
+        /* 页面刚加载出来显示第一张图片*/
+        $("img").eq(0).show().siblings().hide();
+        /*开始做图片轮播，使用定时器*/
+        start();
+        /*鼠标移入小圆点的时候，首先清除定时器，找到当前圆点的索引，改变当前显示的图片，使其变换成圆点对应的图片，当前圆点变换样式*/
+        $("b").hover(function() {
+            clearInterval(timer);
+            i = $(this).index();
+            change();
+        }, function() {
+            /*鼠标移出的时候，重新启动定时器*/
+            start();
+        });
+        $(".left").click(function() {
+            i--;
+            /*当图片已经是第一个，再点击的时候，显示最后一张图片*/
+            if (i == -1) {
+                i = 7;
+            }
+            change();
+        });
+        $(".right").click(function() {
+            i++;
+            /*当图片为最后一个得时候，再点击，显示第一张图片*/
+            if (i == 8) {
+                i = 0;
+            }
+            change();
+        });
+    });
+    /*轮播函数*/
+    function start() {
+        timer = setInterval(function() {
+            i++;
+            if (i == 8) {
+                i = 0;
+            }
+            change();
+        }, 3000);
+    }
+    /*当前图片和对应圆点的变换函数*/
+    function change() {
+        /*当前图片淡入，其他图片淡出*/
+        $("img").eq(i).fadeIn(300).siblings().stop(true, true).fadeOut(300);
+        /*当前圆点添加类current，其他圆点删除其类current*/
+        $("b").eq(i).addClass("current").siblings().removeClass("current");
+    }
+</script>
+
+</html>
